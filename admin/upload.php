@@ -92,7 +92,7 @@ include __DIR__ . '/../includes/header.php';
 
                 <div class="mt-4 text-end">
                     <button type="submit" id="submitButton" class="btn btn-primary">
-                        <i class="bi bi-cloud-arrow-up-fill"></i> Upload Video
+                        <i class="fa-solid fa-cloud-arrow-up me-2"></i>Upload Video
                     </button>
                 </div>
             </form>

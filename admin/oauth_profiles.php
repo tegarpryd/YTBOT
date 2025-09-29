@@ -42,7 +42,7 @@ include __DIR__ . '/../includes/header.php';
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h2"><?php echo htmlspecialchars($page_title); ?></h1>
     <a href="<?php echo htmlspecialchars($google_login_url); ?>" class="btn btn-primary">
-        <i class="bi bi-google me-2"></i> Tambah Profil OAuth Baru
+        <i class="fa-brands fa-google me-2"></i> Tambah Profil OAuth Baru
     </a>
 </div>
 
@@ -72,7 +72,7 @@ include __DIR__ . '/../includes/header.php';
                         <?php foreach ($profiles as $profile): ?>
                             <tr>
                                 <td>
-                                    <i class="bi bi-person-badge-fill text-success"></i>
+                                    <i class="fa-solid fa-user-check text-success me-2"></i>
                                     <strong><?php echo htmlspecialchars($profile['profile_name']); ?></strong><br>
                                     <small class="text-muted"><?php echo htmlspecialchars($profile['email']); ?></small>
                                 </td>
@@ -88,7 +88,7 @@ include __DIR__ . '/../includes/header.php';
                                     <form method="POST" action="oauth_profiles.php" onsubmit="return confirm('Apakah Anda yakin ingin menghapus profil ini? Semua channel terkait juga akan dihapus.');" class="d-inline">
                                         <input type="hidden" name="profile_id" value="<?php echo $profile['id']; ?>">
                                         <button type="submit" name="delete_profile" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash-fill"></i> Hapus
+                                            <i class="fa-solid fa-trash-can"></i> Hapus
                                         </button>
                                     </form>
                                 </td>

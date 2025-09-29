@@ -91,7 +91,7 @@ include __DIR__ . '/../includes/header.php';
     <h1 class="h2"><?php echo htmlspecialchars($page_title); ?></h1>
     <div class="btn-group">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-arrow-repeat"></i> Sinkronisasi Ulang
+            <i class="fa-solid fa-arrows-rotate me-2"></i> Sinkronisasi Ulang
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
             <?php if (empty($profiles_with_channels)): ?>
@@ -142,7 +142,7 @@ include __DIR__ . '/../includes/header.php';
                                 <td><strong><?php echo htmlspecialchars($channel['title']); ?></strong></td>
                                 <td><?php echo number_format($channel['subscriber_count']); ?></td>
                                 <td>
-                                    <i class="bi bi-google text-muted"></i>
+                                    <i class="fa-brands fa-google text-muted me-2"></i>
                                     <?php echo htmlspecialchars($channel['oauth_email']); ?>
                                 </td>
                                 <td><code class="user-select-all"><?php echo htmlspecialchars($channel['youtube_channel_id']); ?></code></td>

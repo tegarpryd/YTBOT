@@ -62,7 +62,7 @@ include __DIR__ . '/../includes/header.php';
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_users; ?></div>
                     </div>
                     <div class="col-auto">
-                        <i class="bi bi-people-fill fs-2 text-gray-300"></i>
+                        <i class="fa-solid fa-users fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@ include __DIR__ . '/../includes/header.php';
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_oauth_profiles; ?></div>
                     </div>
                     <div class="col-auto">
-                        <i class="bi bi-google fs-2 text-gray-300"></i>
+                        <i class="fa-brands fa-google fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@ include __DIR__ . '/../includes/header.php';
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_channels; ?></div>
                     </div>
                     <div class="col-auto">
-                        <i class="bi bi-youtube fs-2 text-gray-300"></i>
+                        <i class="fa-brands fa-youtube fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -111,7 +111,7 @@ include __DIR__ . '/../includes/header.php';
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_uploads; ?></div>
                     </div>
                     <div class="col-auto">
-                        <i class="bi bi-cloud-check-fill fs-2 text-gray-300"></i>
+                        <i class="fa-solid fa-cloud-check fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>

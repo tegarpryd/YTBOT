@@ -106,7 +106,7 @@ $page_title = "Login";
 
             <div class="d-grid">
                 <a href="<?php echo htmlspecialchars($google_login_url); ?>" class="btn btn-danger">
-                    <i class="bi bi-google"></i> Tambah & Autentikasi dengan Google
+                    <i class="fa-brands fa-google me-2"></i> Tambah & Autentikasi dengan Google
                 </a>
             </div>
             <p class="small text-center mt-3 text-muted">

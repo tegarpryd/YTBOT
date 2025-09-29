@@ -16,7 +16,7 @@ include __DIR__ . '/../includes/header.php';
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h2"><?php echo htmlspecialchars($page_title); ?></h1>
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" data-action="add">
-        <i class="bi bi-person-plus-fill me-2"></i> Tambah User Baru
+        <i class="fa-solid fa-user-plus me-2"></i> Tambah User Baru
     </button>
 </div>
 
@@ -59,19 +59,19 @@ include __DIR__ . '/../includes/header.php';
                                         data-username="<?php echo htmlspecialchars($user['username']); ?>"
                                         data-email="<?php echo htmlspecialchars($user['email']); ?>"
                                         data-role="<?php echo $user['role']; ?>">
-                                    <i class="bi bi-pencil-fill"></i> Edit
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
                                 </button>
                                 <form action="handle_user_crud.php" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status pengguna ini?');">
                                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                     <?php if ($user['status'] === 'active'): ?>
                                         <input type="hidden" name="action" value="suspend">
                                         <button type="submit" class="btn btn-sm btn-secondary">
-                                            <i class="bi bi-pause-circle-fill"></i> Suspend
+                                            <i class="fa-solid fa-user-slash"></i> Suspend
                                         </button>
                                     <?php else: ?>
                                         <input type="hidden" name="action" value="activate">
                                         <button type="submit" class="btn btn-sm btn-success">
-                                            <i class="bi bi-play-circle-fill"></i> Activate
+                                            <i class="fa-solid fa-user-check"></i> Activate
                                         </button>
                                     <?php endif; ?>
                                 </form>

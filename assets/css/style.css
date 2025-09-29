@@ -2,6 +2,8 @@
 
 body {
     overflow-x: hidden;
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa; /* Memberi sedikit warna pada background */
 }
 
 #sidebar-wrapper {
@@ -18,6 +20,12 @@ body {
 #sidebar-wrapper .list-group {
     width: 15rem;
 }
+
+#sidebar-wrapper .list-group-item i {
+    width: 20px; /* Meratakan ikon di sidebar */
+    text-align: center;
+}
+
 
 #page-content-wrapper {
     min-width: 100vw;
@@ -41,6 +49,39 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
         margin-left: -15rem;
     }
 }
+
+/* UI/UX Improvements */
+.card {
+    border: none; /* Menghapus border default kartu */
+}
+.card.shadow {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1) !important; /* Bayangan lebih lembut */
+}
+
+.btn {
+    border-radius: 0.35rem; /* Sudut tombol lebih bulat */
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.list-group-item.active {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.list-group-item-action.list-group-item-dark:hover,
+.list-group-item-action.list-group-item-dark:focus {
+    background-color: #4a4a4a;
+    color: #fff;
+}
+
+.sidebar-heading a {
+    transition: opacity 0.2s ease-in-out;
+}
+.sidebar-heading a:hover {
+    opacity: 0.8;
+}
+
 
 /* Style tambahan untuk kartu statistik di dashboard */
 .card.border-left-primary { border-left: .25rem solid #4e73df!important; }
