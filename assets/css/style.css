@@ -1,0 +1,57 @@
+/* Custom CSS untuk Template Admin */
+
+body {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    transition: margin 0.25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+}
+
+body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
+
+/* Style tambahan untuk kartu statistik di dashboard */
+.card.border-left-primary { border-left: .25rem solid #4e73df!important; }
+.card.border-left-success { border-left: .25rem solid #1cc88a!important; }
+.card.border-left-info { border-left: .25rem solid #36b9cc!important; }
+.card.border-left-warning { border-left: .25rem solid #f6c23e!important; }
+
+.text-gray-300 { color: #dddfeb!important; }
+
+/* Menyesuaikan tinggi sidebar agar scrollable jika kontennya panjang */
+#sidebar-wrapper .list-group {
+    max-height: calc(100vh - 56px); /* 56px adalah tinggi header */
+    overflow-y: auto;
+}
