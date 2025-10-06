@@ -33,15 +33,35 @@ $stmt->execute([':user_id' => $_SESSION['user_id']]);
 $profiles = $stmt->fetchAll();
 
 // Get Google Auth URL for the "Add New" button
-$google_client = get_google_client();
-$google_login_url = $google_client->createAuthUrl();
+$google_login_url = '#'; // Default value
+$credentials_error = null;
+try {
+    $credentials = get_current_user_google_credentials($pdo);
+    if ($credentials) {
+        $client = get_google_client($credentials['client_id'], $credentials['client_secret']);
+        $google_login_url = $client->createAuthUrl();
+    } else {
+        // This will be caught and displayed as a message
+        throw new Exception("Kredensial Google (Client ID/Secret) Anda belum diatur.");
+    }
+} catch (Exception $e) {
+    $credentials_error = $e->getMessage();
+}
+
 
 include __DIR__ . '/../includes/header.php';
 ?>
 
+<?php if ($credentials_error): ?>
+<div class="alert alert-warning">
+    <strong>Aksi Dibutuhkan:</strong> <?php echo htmlspecialchars($credentials_error); ?>
+    <a href="settings.php" class="alert-link">Buka Halaman Pengaturan untuk menyiapkannya.</a>
+</div>
+<?php endif; ?>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h2"><?php echo htmlspecialchars($page_title); ?></h1>
-    <a href="<?php echo htmlspecialchars($google_login_url); ?>" class="btn btn-primary">
+    <a href="<?php echo htmlspecialchars($google_login_url); ?>" class="btn btn-primary <?php if ($credentials_error) echo 'disabled'; ?>">
         <i class="fa-brands fa-google me-2"></i> Tambah Profil OAuth Baru
     </a>
 </div>

@@ -26,10 +26,13 @@ try {
     $stmt_uploads->execute([':user_id' => $_SESSION['user_id']]);
     $total_uploads = $stmt_uploads->fetchColumn();
 
-    // Log aktivitas terbaru
-    $stmt_logs = $pdo->prepare("SELECT a.*, u.username FROM activity_logs a LEFT JOIN users u ON a.user_id = u.id ORDER BY a.created_at DESC LIMIT 10");
-    $stmt_logs->execute();
-    $recent_logs = $stmt_logs->fetchAll();
+    // Log aktivitas terbaru (hanya untuk admin)
+    $recent_logs = [];
+    if (is_admin()) {
+        $stmt_logs = $pdo->prepare("SELECT a.*, u.username FROM activity_logs a LEFT JOIN users u ON a.user_id = u.id ORDER BY a.created_at DESC LIMIT 10");
+        $stmt_logs->execute();
+        $recent_logs = $stmt_logs->fetchAll();
+    }
 
 } catch (PDOException $e) {
     // Tangani error database dengan baik
@@ -119,6 +122,7 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
+<?php if (is_admin()): ?>
 <!-- Log Aktivitas Terbaru -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -155,6 +159,7 @@ include __DIR__ . '/../includes/header.php';
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 
 <?php

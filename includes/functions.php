@@ -72,16 +72,48 @@ function require_admin() {
 }
 
 /**
- * Membuat dan mengkonfigurasi Google API Client.
- * @return Google_Client Objek Google Client yang telah dikonfigurasi.
+ * Mengambil kredensial Google untuk pengguna yang sedang login.
+ * @param PDO $pdo
+ * @return array|false Kredensial atau false jika tidak ditemukan/tidak login.
  */
-function get_google_client() {
+function get_current_user_google_credentials($pdo) {
+    if (!is_logged_in()) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare("SELECT google_client_id, google_client_secret FROM users WHERE id = :user_id");
+    $stmt->execute([':user_id' => $_SESSION['user_id']]);
+    $credentials = $stmt->fetch();
+
+    if (!$credentials || empty($credentials['google_client_id']) || empty($credentials['google_client_secret'])) {
+        return false;
+    }
+
+    return [
+        'client_id' => decrypt_data($credentials['google_client_id']),
+        'client_secret' => decrypt_data($credentials['google_client_secret'])
+    ];
+}
+
+
+/**
+ * Membuat dan mengkonfigurasi Google API Client berdasarkan kredensial pengguna.
+ * @param string $clientId
+ * @param string $clientSecret
+ * @return Google_Client Objek Google Client yang telah dikonfigurasi.
+ * @throws Exception jika kredensial tidak valid.
+ */
+function get_google_client($clientId, $clientSecret) {
+    if (empty($clientId) || empty($clientSecret)) {
+        throw new Exception("Google Client ID atau Client Secret belum diatur untuk akun Anda. Silakan atur di halaman Pengaturan.");
+    }
+
     $client = new Google_Client();
-    $client->setClientId(GOOGLE_CLIENT_ID);
-    $client->setClientSecret(GOOGLE_CLIENT_SECRET);
-    $client->setRedirectUri(GOOGLE_REDIRECT_URI);
+    $client->setClientId($clientId);
+    $client->setClientSecret($clientSecret);
+    $client->setRedirectUri(APP_URL . '/oauth_callback.php'); // Menggunakan konstanta dari DB
     $client->setAccessType('offline');
-    $client->setPrompt('consent'); // Memaksa refresh token selalu diberikan
+    $client->setPrompt('consent');
     $client->setScopes([
         'https://www.googleapis.com/auth/youtube.upload',
         'https://www.googleapis.com/auth/youtube.readonly',

@@ -22,6 +22,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <a href="<?php echo APP_URL; ?>/admin/channels.php" class="list-group-item list-group-item-action list-group-item-dark p-3 <?php echo ($current_page == 'channels.php') ? 'active' : ''; ?>">
             <i class="fa-solid fa-tv me-2"></i> Daftar Channel
         </a>
+        <a href="<?php echo APP_URL; ?>/admin/settings.php" class="list-group-item list-group-item-action list-group-item-dark p-3 <?php echo ($current_page == 'settings.php') ? 'active' : ''; ?>">
+            <i class="fa-solid fa-key me-2"></i> Pengaturan API
+        </a>
 
         <?php if (is_admin()): // Tampilkan menu ini hanya jika pengguna adalah admin ?>
         <hr class="text-secondary">

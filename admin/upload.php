@@ -38,17 +38,23 @@ include __DIR__ . '/../includes/header.php';
         <div class="card-body">
             <form id="uploadForm" action="handle_upload.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label for="channel_id" class="form-label">Pilih Channel Tujuan</label>
-                    <select class="form-select" id="channel_id" name="channel_id" required>
-                        <option value="" disabled selected>-- Pilih Channel --</option>
+                    <label class="form-label">Pilih Channel Tujuan (Bisa lebih dari satu)</label>
+                    <div class="channel-list-container border rounded p-3" style="max-height: 200px; overflow-y: auto;">
                         <?php foreach ($grouped_channels as $email => $channels): ?>
-                            <optgroup label="<?php echo htmlspecialchars($email); ?>">
+                            <div class="mb-3">
+                                <strong class="d-block border-bottom pb-1 mb-2"><i class="fa-brands fa-google me-2"></i><?php echo htmlspecialchars($email); ?></strong>
                                 <?php foreach ($channels as $channel): ?>
-                                    <option value="<?php echo $channel['id']; ?>"><?php echo htmlspecialchars($channel['channel_title']); ?></option>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="channel_ids[]" value="<?php echo $channel['id']; ?>" id="channel_<?php echo $channel['id']; ?>">
+                                        <label class="form-check-label" for="channel_<?php echo $channel['id']; ?>">
+                                            <?php echo htmlspecialchars($channel['channel_title']); ?>
+                                        </label>
+                                    </div>
                                 <?php endforeach; ?>
-                            </optgroup>
+                            </div>
                         <?php endforeach; ?>
-                    </select>
+                    </div>
+                    <div class="form-text">Pilih setidaknya satu channel.</div>
                 </div>
 
                 <div class="mb-3">

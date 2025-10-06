@@ -1,31 +1,81 @@
-/* Custom CSS untuk Template Admin */
+/* =================================================================
+   YouTube Uploader - Custom Stylesheet v2.0
+   Author: Jules
+   ================================================================= */
 
+/* 1. CSS Variables (Custom Properties) for Theming
+-------------------------------------------------- */
+:root {
+    --bg-color: #e0e5ec;
+    --primary-color: #4a76d8;
+    --light-shadow: rgba(255, 255, 255, 0.9);
+    --dark-shadow: rgba(163, 177, 198, 0.6);
+    --text-color: #555;
+    --card-bg: #e6eaf1;
+    --border-radius: 12px;
+    --transition-speed: 0.3s;
+}
+
+/* 2. Global Styles & Typography
+-------------------------------------------------- */
 body {
     overflow-x: hidden;
     font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa; /* Memberi sedikit warna pada background */
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+/* 3. Layout: Sidebar & Page Wrapper
+-------------------------------------------------- */
 #sidebar-wrapper {
     min-height: 100vh;
-    margin-left: -15rem;
-    transition: margin 0.25s ease-out;
+    margin-left: -16rem;
+    transition: margin var(--transition-speed) ease-out;
+    background: rgba(255, 255, 255, 0.1); /* Glassmorphism background */
+    backdrop-filter: blur(15px);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
 }
 
 #sidebar-wrapper .sidebar-heading {
-    padding: 0.875rem 1.25rem;
+    padding: 1.2rem 1.25rem;
     font-size: 1.2rem;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+#sidebar-wrapper .sidebar-heading .fa-youtube {
+    color: #ff0000;
 }
 
 #sidebar-wrapper .list-group {
-    width: 15rem;
+    width: 16rem;
 }
-
+#sidebar-wrapper .list-group-item {
+    background: transparent;
+    color: #f0f0f0;
+    border: none;
+    padding: 1rem 1.25rem;
+    font-weight: 500;
+    transition: all var(--transition-speed) ease;
+}
 #sidebar-wrapper .list-group-item i {
-    width: 20px; /* Meratakan ikon di sidebar */
-    text-align: center;
+    width: 20px; text-align: center; margin-right: 0.75rem;
 }
-
+#sidebar-wrapper .list-group-item.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: inset 3px 3px 5px rgba(0,0,0,0.2), inset -3px -3px 5px rgba(255,255,255,0.2);
+}
+#sidebar-wrapper .list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    transform: translateX(5px);
+}
 
 #page-content-wrapper {
     min-width: 100vw;
@@ -35,64 +85,117 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-left: 0;
 }
 
-@media (min-width: 768px) {
-    #sidebar-wrapper {
-        margin-left: 0;
-    }
-
-    #page-content-wrapper {
-        min-width: 0;
-        width: 100%;
-    }
-
-    body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
-        margin-left: -15rem;
-    }
+/* 4. Component Styles: Cards, Buttons, Forms (Neumorphism / 3D Style)
+-------------------------------------------------------------------- */
+.card, .alert {
+    border-radius: var(--border-radius);
+    border: none;
+    background: var(--card-bg);
+    /* The 3D / Neumorphic shadow effect */
+    box-shadow: 7px 7px 15px var(--dark-shadow), -7px -7px 15px var(--light-shadow);
+    transition: all var(--transition-speed) ease;
 }
-
-/* UI/UX Improvements */
-.card {
-    border: none; /* Menghapus border default kartu */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 10px 10px 20px var(--dark-shadow), -10px -10px 20px var(--light-shadow);
 }
-.card.shadow {
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1) !important; /* Bayangan lebih lembut */
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(163, 177, 198, 0.3);
 }
 
 .btn {
-    border-radius: 0.35rem; /* Sudut tombol lebih bulat */
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: all var(--transition-speed) ease;
+    border: none;
+    box-shadow: 5px 5px 10px var(--dark-shadow), -5px -5px 10px var(--light-shadow);
+}
+.btn:hover {
+    transform: translateY(-2px);
+}
+.btn:active {
+    box-shadow: inset 5px 5px 10px var(--dark-shadow), inset -5px -5px 10px var(--light-shadow) !important;
+    transform: translateY(2px);
+}
+.btn-primary {
+    background-color: var(--primary-color);
 }
 
-.list-group-item.active {
-    background-color: #4e73df;
-    border-color: #4e73df;
+.form-control, .form-select {
+    border-radius: var(--border-radius);
+    border: none;
+    background-color: var(--bg-color);
+    padding: 0.75rem 1rem;
+    /* Inset shadow for a "pressed in" look */
+    box-shadow: inset 4px 4px 8px var(--dark-shadow), inset -4px -4px 8px var(--light-shadow);
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--bg-color);
+    box-shadow: inset 4px 4px 8px var(--dark-shadow), inset -4px -4px 8px var(--light-shadow);
 }
 
-.list-group-item-action.list-group-item-dark:hover,
-.list-group-item-action.list-group-item-dark:focus {
-    background-color: #4a4a4a;
-    color: #fff;
+/* 5. Mobile Responsiveness
+-------------------------------------------------- */
+@media (max-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: -16rem;
+    }
+    body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+        margin-left: 0;
+    }
+    #page-content-wrapper {
+        min-width: 100vw;
+    }
+    .card .table-responsive {
+        font-size: 0.9rem;
+    }
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    form .btn {
+        width: auto; /* Revert for form buttons */
+    }
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    .d-flex .btn {
+        margin-top: 1rem;
+    }
 }
 
-.sidebar-heading a {
-    transition: opacity 0.2s ease-in-out;
+/* 6. Specific Component Tweaks
+-------------------------------------------------- */
+.login-card {
+    max-width: 400px;
+    margin: 0 auto;
 }
-.sidebar-heading a:hover {
-    opacity: 0.8;
+.navbar {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
-
-
-/* Style tambahan untuk kartu statistik di dashboard */
+.channel-list-container {
+    background-color: var(--bg-color);
+    box-shadow: inset 4px 4px 8px var(--dark-shadow), inset -4px -4px 8px var(--light-shadow);
+}
+.progress {
+    border-radius: var(--border-radius);
+    background-color: var(--bg-color);
+    box-shadow: inset 4px 4px 8px var(--dark-shadow), inset -4px -4px 8px var(--light-shadow);
+}
+.progress-bar {
+    background-color: var(--primary-color);
+}
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(0,0,0,0.02);
+}
 .card.border-left-primary { border-left: .25rem solid #4e73df!important; }
 .card.border-left-success { border-left: .25rem solid #1cc88a!important; }
 .card.border-left-info { border-left: .25rem solid #36b9cc!important; }
 .card.border-left-warning { border-left: .25rem solid #f6c23e!important; }
-
-.text-gray-300 { color: #dddfeb!important; }
-
-/* Menyesuaikan tinggi sidebar agar scrollable jika kontennya panjang */
-#sidebar-wrapper .list-group {
-    max-height: calc(100vh - 56px); /* 56px adalah tinggi header */
-    overflow-y: auto;
+.text-gray-300 { color: #ccc!important; }
+.fa-2x {
+    opacity: 0.5;
 }

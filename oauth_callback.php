@@ -6,10 +6,17 @@ require_once __DIR__ . '/includes/functions.php';
 // Ini untuk menautkan profil OAuth baru ke akun pengguna platform yang ada.
 require_login();
 
-$client = get_google_client();
+try {
+    // Ambil kredensial Google milik pengguna yang sedang login
+    $credentials = get_current_user_google_credentials($pdo);
+    if (!$credentials) {
+        throw new Exception("Kredensial Google Anda (Client ID/Secret) belum diatur. Silakan atur di halaman Pengaturan.");
+    }
 
-// Menangani error dari Google, misalnya jika pengguna menolak izin.
-if (isset($_GET['error'])) {
+    $client = get_google_client($credentials['client_id'], $credentials['client_secret']);
+
+    // Menangani error dari Google, misalnya jika pengguna menolak izin.
+    if (isset($_GET['error'])) {
     $_SESSION['error_message'] = 'Proses otorisasi Google dibatalkan atau gagal: ' . htmlspecialchars($_GET['error']);
     redirect('/admin/oauth_profiles.php');
 }

@@ -1,7 +1,8 @@
--- Skema Database untuk Platform Uploader YouTube
+-- Skema Database untuk Platform Uploader YouTube (Versi 2)
 -- Target: MySQL
 
 -- Tabel untuk pengguna platform (admin, user)
+-- Menambahkan kolom untuk menyimpan Client ID dan Secret per pengguna (dienkripsi)
 CREATE TABLE `users` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `username` VARCHAR(50) NOT NULL UNIQUE,
@@ -9,6 +10,8 @@ CREATE TABLE `users` (
   `password` VARCHAR(255) NOT NULL,
   `role` ENUM('admin', 'user') NOT NULL DEFAULT 'user',
   `status` ENUM('active', 'suspended') NOT NULL DEFAULT 'active',
+  `google_client_id` TEXT,
+  `google_client_secret` TEXT,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -79,7 +82,24 @@ CREATE TABLE `activity_logs` (
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert user admin default
+-- Tabel baru untuk menyimpan konfigurasi aplikasi
+CREATE TABLE `settings` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `setting_name` VARCHAR(100) NOT NULL UNIQUE,
+  `setting_value` TEXT,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- Insert data awal
 -- Ganti 'admin_password' dengan hash password yang aman saat implementasi
 INSERT INTO `users` (`username`, `email`, `password`, `role`, `status`) VALUES
 ('admin', 'admin@example.com', '$2y$10$g.N.UeR0sD/y.0a/8.0c.eA2G7C1bE3F4H5I6J7K8L9M0N1O2P3Q', 'admin', 'active');
+
+-- Masukkan beberapa pengaturan default ke dalam tabel settings
+INSERT INTO `settings` (`setting_name`, `setting_value`) VALUES
+('app_name', 'YouTube Multi-Channel Uploader'),
+('app_url', 'http://localhost/youtube-uploader'), -- Sesuaikan dengan URL Anda
+('session_lifetime', '3600'),
+('encryption_key', 'your-super-secret-and-strong-encryption-key'), -- Ganti ini!
+('encryption_cipher', 'AES-256-CBC');

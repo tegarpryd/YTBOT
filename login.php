@@ -47,10 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     }
 }
 
-// Persiapan untuk Login dengan Google (tombol di UI)
-$google_client = get_google_client();
-$google_login_url = $google_client->createAuthUrl();
-
 $page_title = "Login";
 ?>
 <!DOCTYPE html>
@@ -100,18 +96,7 @@ $page_title = "Login";
                 </div>
             </form>
 
-            <hr class="my-4">
 
-            <p class="text-center text-muted">Atau tambahkan profil OAuth baru:</p>
-
-            <div class="d-grid">
-                <a href="<?php echo htmlspecialchars($google_login_url); ?>" class="btn btn-danger">
-                    <i class="fa-brands fa-google me-2"></i> Tambah & Autentikasi dengan Google
-                </a>
-            </div>
-            <p class="small text-center mt-3 text-muted">
-                Tombol ini digunakan untuk menambahkan Akun Google baru ke dalam sistem. Anda harus login terlebih dahulu untuk mengelolanya.
-            </p>
         </div>
     </div>
 

@@ -7,15 +7,21 @@ require_login();
 
 // Handle re-sync request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['resync_channels'])) {
-    $profile_id_to_sync = $_POST['profile_id'] ?? 0;
+    try {
+        // Ambil kredensial Google milik pengguna
+        $credentials = get_current_user_google_credentials($pdo);
+        if (!$credentials) {
+            throw new Exception("Kredensial Google Anda (Client ID/Secret) belum diatur.");
+        }
 
-    $stmt = $pdo->prepare("SELECT * FROM oauth_profiles WHERE id = :id AND user_id = :user_id");
-    $stmt->execute([':id' => $profile_id_to_sync, ':user_id' => $_SESSION['user_id']]);
-    $profile = $stmt->fetch();
+        $profile_id_to_sync = $_POST['profile_id'] ?? 0;
 
-    if ($profile) {
-        try {
-            $client = get_google_client();
+        $stmt = $pdo->prepare("SELECT * FROM oauth_profiles WHERE id = :id AND user_id = :user_id");
+        $stmt->execute([':id' => $profile_id_to_sync, ':user_id' => $_SESSION['user_id']]);
+        $profile = $stmt->fetch();
+
+        if ($profile) {
+            $client = get_google_client($credentials['client_id'], $credentials['client_secret']);
             $access_token = $client->fetchAccessTokenWithRefreshToken(decrypt_data($profile['refresh_token']));
             $client->setAccessToken($access_token);
 
