@@ -1,12 +1,12 @@
 <?php
-// File untuk Fungsi-fungsi Pembantu
+// File untuk Fungsi-fungsi Pembantu (Versi 2 - Diperbaiki)
 
 require_once __DIR__ . '/../config/config.php';
 
 /**
- * Mengenkripsi string (misalnya, refresh token).
+ * Mengenkripsi string.
  * @param string $data Data yang akan dienkripsi.
- * @return string String terenkripsi dalam format base64.
+ * @return string String terenkripsi.
  */
 function encrypt_data($data) {
     $iv_length = openssl_cipher_iv_length(ENCRYPTION_CIPHER);
@@ -16,19 +16,32 @@ function encrypt_data($data) {
 }
 
 /**
- * Mendekripsi string yang dienkripsi oleh encrypt_data.
- * @param string $data String terenkripsi dalam format base64.
+ * Mendekripsi string dengan aman.
+ * @param string $data String terenkripsi.
  * @return string|false Data asli atau false jika gagal.
  */
 function decrypt_data($data) {
-    list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
-    if (!$iv) return false;
+    if (empty($data)) {
+        return false;
+    }
+    $decoded_data = base64_decode($data, true);
+    if ($decoded_data === false || !str_contains($decoded_data, '::')) {
+        error_log("Peringatan Dekripsi: Format data tidak valid atau bukan base64.");
+        return false;
+    }
+
+    list($encrypted_data, $iv) = explode('::', $decoded_data, 2);
+
+    if (empty($iv) || empty($encrypted_data)) {
+        error_log("Peringatan Dekripsi: Data tidak lengkap setelah di-explode.");
+        return false;
+    }
+
     return openssl_decrypt($encrypted_data, ENCRYPTION_CIPHER, ENCRYPTION_KEY, 0, $iv);
 }
 
 /**
  * Mengalihkan pengguna ke halaman lain.
- * @param string $url URL tujuan.
  */
 function redirect($url) {
     header("Location: " . APP_URL . $url);
@@ -37,7 +50,6 @@ function redirect($url) {
 
 /**
  * Memeriksa apakah pengguna sudah login.
- * @return bool True jika login, false jika tidak.
  */
 function is_logged_in() {
     return isset($_SESSION['user_id']);
@@ -45,7 +57,6 @@ function is_logged_in() {
 
 /**
  * Memeriksa apakah pengguna yang login adalah admin.
- * @return bool True jika admin, false jika tidak.
  */
 function is_admin() {
     return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
@@ -72,9 +83,9 @@ function require_admin() {
 }
 
 /**
- * Mengambil kredensial Google untuk pengguna yang sedang login.
+ * Mengambil kredensial Google untuk pengguna yang sedang login dengan aman.
  * @param PDO $pdo
- * @return array|false Kredensial atau false jika tidak ditemukan/tidak login.
+ * @return array|false Kredensial atau false jika tidak ditemukan/gagal dekripsi.
  */
 function get_current_user_google_credentials($pdo) {
     if (!is_logged_in()) {
@@ -89,18 +100,22 @@ function get_current_user_google_credentials($pdo) {
         return false;
     }
 
+    $client_id = decrypt_data($credentials['google_client_id']);
+    $client_secret = decrypt_data($credentials['google_client_secret']);
+
+    if ($client_id === false || $client_secret === false) {
+        error_log("Kesalahan Kritis Dekripsi: Gagal mendekripsi Client ID atau Secret untuk user_id: " . $_SESSION['user_id'] . ". Periksa ENCRYPTION_KEY.");
+        return false;
+    }
+
     return [
-        'client_id' => decrypt_data($credentials['google_client_id']),
-        'client_secret' => decrypt_data($credentials['google_client_secret'])
+        'client_id' => $client_id,
+        'client_secret' => $client_secret
     ];
 }
 
-
 /**
  * Membuat dan mengkonfigurasi Google API Client berdasarkan kredensial pengguna.
- * @param string $clientId
- * @param string $clientSecret
- * @return Google_Client Objek Google Client yang telah dikonfigurasi.
  * @throws Exception jika kredensial tidak valid.
  */
 function get_google_client($clientId, $clientSecret) {
@@ -111,7 +126,7 @@ function get_google_client($clientId, $clientSecret) {
     $client = new Google_Client();
     $client->setClientId($clientId);
     $client->setClientSecret($clientSecret);
-    $client->setRedirectUri(APP_URL . '/oauth_callback.php'); // Menggunakan konstanta dari DB
+    $client->setRedirectUri(APP_URL . '/oauth_callback.php');
     $client->setAccessType('offline');
     $client->setPrompt('consent');
     $client->setScopes([
@@ -125,12 +140,6 @@ function get_google_client($clientId, $clientSecret) {
 
 /**
  * Mencatat aktivitas pengguna ke database.
- * @param PDO $pdo Objek koneksi PDO.
- * @param int|null $user_id ID pengguna yang melakukan aksi.
- * @param string $action Deskripsi aksi.
- * @param string|null $target_type Tipe target (e.g., 'user', 'video').
- * @param int|null $target_id ID target.
- * @param string|null $details Detail tambahan.
  */
 function log_activity($pdo, $user_id, $action, $target_type = null, $target_id = null, $details = null) {
     $stmt = $pdo->prepare(
@@ -148,13 +157,12 @@ function log_activity($pdo, $user_id, $action, $target_type = null, $target_id =
 }
 
 /**
- * Menampilkan pesan flash (error/sukses) dan menghapusnya dari session.
- * @param string $key Kunci session untuk pesan.
- * @param string $type Tipe bootstrap alert (e.g., 'danger', 'success').
+ * Menampilkan pesan flash (error/sukses).
  */
 function display_flash_message($key, $type = 'danger') {
     if (isset($_SESSION[$key])) {
-        echo '<div class="alert alert-' . htmlspecialchars($type) . '">' . htmlspecialchars($_SESSION[$key]) . '</div>';
+        // Menggunakan card dan shadow untuk konsistensi dengan UI baru
+        echo '<div class="alert alert-' . htmlspecialchars($type) . ' shadow-sm">' . htmlspecialchars($_SESSION[$key]) . '</div>';
         unset($_SESSION[$key]);
     }
 }
