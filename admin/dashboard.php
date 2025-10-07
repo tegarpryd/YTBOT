@@ -7,9 +7,18 @@ require_login(); // Pastikan pengguna sudah login
 
 // Mengambil statistik dari database
 try {
-    // Jumlah Pengguna
-    $stmt_users = $pdo->query("SELECT COUNT(*) FROM users");
-    $total_users = $stmt_users->fetchColumn();
+    // Cek status penyiapan untuk panduan
+    $stmt_user_setup = $pdo->prepare("SELECT google_client_id FROM users WHERE id = :user_id");
+    $stmt_user_setup->execute([':user_id' => $_SESSION['user_id']]);
+    $user_setup_status = $stmt_user_setup->fetch();
+    $is_api_set = !empty($user_setup_status['google_client_id']);
+
+    // Jumlah Pengguna (hanya untuk admin)
+    $total_users = 0;
+    if (is_admin()) {
+        $stmt_users = $pdo->query("SELECT COUNT(*) FROM users");
+        $total_users = $stmt_users->fetchColumn();
+    }
 
     // Jumlah Profil OAuth
     $stmt_oauth = $pdo->prepare("SELECT COUNT(*) FROM oauth_profiles WHERE user_id = :user_id");
@@ -52,6 +61,56 @@ include __DIR__ . '/../includes/header.php';
 <?php if (isset($error_message)): ?>
     <div class="alert alert-danger"><?php echo htmlspecialchars($error_message); ?></div>
 <?php endif; ?>
+
+<!-- Panduan Langkah Awal -->
+<?php if (!$is_api_set || $total_oauth_profiles == 0): ?>
+<div class="card shadow mb-4">
+    <div class="card-header">
+        <h5 class="m-0"><i class="fa-solid fa-rocket me-2"></i> Langkah Awal</h5>
+    </div>
+    <div class="card-body">
+        <p>Selamat datang di platform uploader! Ikuti langkah-langkah di bawah ini untuk memulai.</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <strong>Langkah 1: Siapkan Kunci API Google Anda</strong>
+                    <p class="mb-0 small text-muted">Anda perlu memasukkan Client ID & Secret dari Google agar aplikasi bisa terhubung.</p>
+                </div>
+                <div class="ms-auto mt-2 mt-md-0">
+                    <?php if ($is_api_set): ?>
+                        <span class="badge bg-success p-2"><i class="fa-solid fa-check me-1"></i> Selesai</span>
+                    <?php else: ?>
+                        <a href="settings.php" class="btn btn-sm btn-primary">Buka Pengaturan</a>
+                    <?php endif; ?>
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap <?php if (!$is_api_set) echo 'opacity-50'; ?>">
+                <div>
+                    <strong>Langkah 2: Hubungkan Akun Google</strong>
+                    <p class="mb-0 small text-muted">Autentikasi akun Google yang memiliki channel YouTube yang ingin Anda kelola.</p>
+                </div>
+                <div class="ms-auto mt-2 mt-md-0">
+                    <?php if ($total_oauth_profiles > 0): ?>
+                        <span class="badge bg-success p-2"><i class="fa-solid fa-check me-1"></i> Selesai</span>
+                    <?php else: ?>
+                        <a href="oauth_profiles.php" class="btn btn-sm btn-primary <?php if (!$is_api_set) echo 'disabled'; ?>">Hubungkan Akun</a>
+                    <?php endif; ?>
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap opacity-50">
+                 <div>
+                    <strong>Langkah 3: Unggah Video Pertama Anda!</strong>
+                    <p class="mb-0 small text-muted">Setelah channel Anda muncul, Anda siap untuk mengunggah.</p>
+                </div>
+                <div class="ms-auto mt-2 mt-md-0">
+                    <a href="upload.php" class="btn btn-sm btn-primary disabled">Upload Video</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>
+<!-- Akhir Panduan -->
 
 <!-- Kartu Statistik -->
 <div class="row">

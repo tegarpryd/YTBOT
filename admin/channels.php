@@ -96,7 +96,7 @@ include __DIR__ . '/../includes/header.php';
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h2"><?php echo htmlspecialchars($page_title); ?></h1>
     <div class="btn-group">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-toggle="tooltip" title="Ambil ulang daftar channel terbaru dari Google untuk profil yang dipilih.">
             <i class="fa-solid fa-arrows-rotate me-2"></i> Sinkronisasi Ulang
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -116,7 +116,7 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
-<p>Ini adalah daftar semua channel YouTube yang terhubung dengan akun-akun Google Anda. Data diperbarui setiap kali Anda menambahkan atau mengautentikasi ulang profil OAuth.</p>
+<p class="text-muted mb-4">Berikut adalah semua channel YouTube yang telah berhasil disinkronkan dari Akun Google Anda. Channel yang ada di daftar ini siap untuk dipilih saat Anda mengunggah video.</p>
 
 <div class="card shadow">
     <div class="card-body">
@@ -134,9 +134,13 @@ include __DIR__ . '/../includes/header.php';
                 <tbody>
                     <?php if (empty($channels)): ?>
                         <tr>
-                            <td colspan="5" class="text-center py-4">
-                                Tidak ada channel yang ditemukan. <br>
-                                Coba <a href="<?php echo APP_URL; ?>/admin/oauth_profiles.php">tambahkan profil OAuth</a> untuk memulai.
+                            <td colspan="5" class="text-center p-5">
+                                <div class="display-4 text-muted mb-3"><i class="fa-solid fa-tv"></i></div>
+                                <h4>Tidak Ada Channel Ditemukan</h4>
+                                <p class="text-muted">Aplikasi ini belum menemukan channel YouTube dari profil Google Anda.</p>
+                                <a href="<?php echo APP_URL; ?>/admin/oauth_profiles.php" class="btn btn-primary mt-2">
+                                    <i class="fa-brands fa-google me-2"></i>Kelola Profil Google
+                                </a>
                             </td>
                         </tr>
                     <?php else: ?>

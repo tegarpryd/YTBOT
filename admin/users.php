@@ -20,7 +20,7 @@ include __DIR__ . '/../includes/header.php';
     </button>
 </div>
 
-<p>Halaman ini memungkinkan Anda untuk mengelola pengguna yang dapat mengakses platform ini. Anda dapat menambah, mengedit, atau menangguhkan akun pengguna.</p>
+<p class="text-muted mb-4">Sebagai admin, Anda dapat mengelola siapa saja yang dapat mengakses platform ini. Anda dapat menambah pengguna baru (misalnya, anggota tim), mengubah detail mereka, atau menonaktifkan akun mereka untuk sementara.</p>
 
 <div class="card shadow">
     <div class="card-body">
@@ -58,19 +58,20 @@ include __DIR__ . '/../includes/header.php';
                                         data-id="<?php echo $user['id']; ?>"
                                         data-username="<?php echo htmlspecialchars($user['username']); ?>"
                                         data-email="<?php echo htmlspecialchars($user['email']); ?>"
-                                        data-role="<?php echo $user['role']; ?>">
+                                        data-role="<?php echo $user['role']; ?>"
+                                        data-bs-toggle="tooltip" title="Ubah detail pengguna ini.">
                                     <i class="fa-solid fa-pen-to-square"></i> Edit
                                 </button>
                                 <form action="handle_user_crud.php" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status pengguna ini?');">
                                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                     <?php if ($user['status'] === 'active'): ?>
                                         <input type="hidden" name="action" value="suspend">
-                                        <button type="submit" class="btn btn-sm btn-secondary">
+                                        <button type="submit" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Tangguhkan akun, pengguna tidak akan bisa login.">
                                             <i class="fa-solid fa-user-slash"></i> Suspend
                                         </button>
                                     <?php else: ?>
                                         <input type="hidden" name="action" value="activate">
-                                        <button type="submit" class="btn btn-sm btn-success">
+                                        <button type="submit" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="Aktifkan kembali akun pengguna.">
                                             <i class="fa-solid fa-user-check"></i> Activate
                                         </button>
                                     <?php endif; ?>

@@ -39,7 +39,11 @@ include __DIR__ . '/../includes/header.php';
             <form id="uploadForm" action="handle_upload.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Pilih Channel Tujuan (Bisa lebih dari satu)</label>
-                    <div class="channel-list-container border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                    <div class="d-flex gap-2 mb-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="selectAllChannels">Pilih Semua</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="deselectAllChannels">Hapus Pilihan</button>
+                    </div>
+                    <div id="channelList" class="channel-list-container border rounded p-3" style="max-height: 200px; overflow-y: auto;">
                         <?php foreach ($grouped_channels as $email => $channels): ?>
                             <div class="mb-3">
                                 <strong class="d-block border-bottom pb-1 mb-2"><i class="fa-brands fa-google me-2"></i><?php echo htmlspecialchars($email); ?></strong>

@@ -66,7 +66,7 @@ include __DIR__ . '/../includes/header.php';
     </a>
 </div>
 
-<p>Di bawah ini adalah daftar semua Akun Google yang telah Anda autentikasi dengan platform ini. Anda dapat menghapus profil yang tidak lagi Anda gunakan.</p>
+<p class="text-muted mb-4">Ini adalah daftar semua Akun Google yang telah Anda hubungkan. Setiap akun dapat memiliki banyak channel YouTube. Anda dapat menghubungkan lebih banyak akun atau menghapus yang tidak lagi diperlukan.</p>
 
 <div class="card shadow">
     <div class="card-body">
@@ -83,9 +83,13 @@ include __DIR__ . '/../includes/header.php';
                 <tbody>
                     <?php if (empty($profiles)): ?>
                         <tr>
-                            <td colspan="4" class="text-center py-4">
-                                Anda belum menambahkan profil OAuth. <br>
-                                <a href="<?php echo htmlspecialchars($google_login_url); ?>">Klik di sini untuk menambahkan yang pertama.</a>
+                            <td colspan="4" class="text-center p-5">
+                                <div class="display-4 text-muted mb-3"><i class="fa-brands fa-google"></i></div>
+                                <h4>Belum Ada Profil Google yang Terhubung</h4>
+                                <p class="text-muted">Hubungkan akun Google Anda untuk mulai menyinkronkan channel YouTube.</p>
+                                <a href="<?php echo htmlspecialchars($google_login_url); ?>" class="btn btn-primary mt-2 <?php if ($credentials_error) echo 'disabled'; ?>">
+                                    <i class="fa-solid fa-plus me-2"></i>Hubungkan Akun Google Pertama Anda
+                                </a>
                             </td>
                         </tr>
                     <?php else: ?>
@@ -107,7 +111,7 @@ include __DIR__ . '/../includes/header.php';
                                 <td class="text-end">
                                     <form method="POST" action="oauth_profiles.php" onsubmit="return confirm('Apakah Anda yakin ingin menghapus profil ini? Semua channel terkait juga akan dihapus.');" class="d-inline">
                                         <input type="hidden" name="profile_id" value="<?php echo $profile['id']; ?>">
-                                        <button type="submit" name="delete_profile" class="btn btn-sm btn-danger">
+                                        <button type="submit" name="delete_profile" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Hapus profil ini secara permanen dari sistem.">
                                             <i class="fa-solid fa-trash-can"></i> Hapus
                                         </button>
                                     </form>

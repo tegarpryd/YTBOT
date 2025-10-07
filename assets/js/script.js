@@ -57,9 +57,41 @@ window.addEventListener('DOMContentLoaded', event => {
     // 3. AJAX Video Upload with Progress Bar
     // ==================================================
     const uploadForm = document.getElementById('uploadForm');
+    // 4. Bootstrap Tooltip Initialization
+    // ==================================================
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+
     if (uploadForm) {
+        // Channel Selection Logic
+        const selectAllBtn = document.getElementById('selectAllChannels');
+        const deselectAllBtn = document.getElementById('deselectAllChannels');
+        const channelList = document.getElementById('channelList');
+
+        if (selectAllBtn && deselectAllBtn && channelList) {
+            const checkboxes = channelList.querySelectorAll('input[type="checkbox"]');
+
+            selectAllBtn.addEventListener('click', () => {
+                checkboxes.forEach(cb => cb.checked = true);
+            });
+
+            deselectAllBtn.addEventListener('click', () => {
+                checkboxes.forEach(cb => cb.checked = false);
+            });
+        }
+
         uploadForm.addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // Validate at least one channel is selected
+            const checkedChannels = channelList.querySelectorAll('input[type="checkbox"]:checked');
+            if (checkedChannels.length === 0) {
+                alert('Silakan pilih setidaknya satu channel tujuan.');
+                return;
+            }
 
             const formData = new FormData(this);
             const progressBarContainer = document.getElementById('progressBarContainer');

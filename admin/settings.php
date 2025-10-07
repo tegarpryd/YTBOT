@@ -58,7 +58,7 @@ include __DIR__ . '/../includes/header.php';
                 <h6 class="m-0 font-weight-bold text-primary">Kredensial Google API</h6>
             </div>
             <div class="card-body">
-                <p>Masukkan Google Client ID dan Client Secret Anda di bawah ini. Kredensial ini bersifat pribadi untuk akun Anda dan akan digunakan untuk semua interaksi dengan YouTube API.</p>
+                <p>Agar aplikasi ini dapat terhubung dengan akun Google Anda, Anda memerlukan "kunci" khusus dari Google. Kunci ini terdiri dari **Client ID** dan **Client Secret**. Ikuti petunjuk di samping untuk mendapatkannya, lalu masukkan di bawah ini.</p>
 
                 <?php if ($current_client_id): ?>
                     <div class="alert alert-info">
